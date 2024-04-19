@@ -1,0 +1,103 @@
+-- Criando meu BD
+create database if not exists ecommerce;
+use ecommerce;
+
+-- Criando as tabelas do meu BD
+
+-- Tabela clientes:
+create table clients(
+	idClients int primary key auto_increment,
+    Fname varchar(10),
+    Minit varchar(3),
+    Lname varchar (20),
+    CPF char(11) not null unique,
+    Address varchar(255),
+    BirthDate date    
+);
+alter table clients auto_increment = 1;
+
+
+-- Tabela produto:
+create table products(
+	idProducts int primary key auto_increment,
+    Pname varchar(20) not null,
+    classification_kids bool default false,
+    category enum('Eletronic', 'Clothing', 'Toy', 'Furniture', 'Food'),
+	rate float default 0,
+    size varchar(10)
+);
+alter table products auto_increment = 1;
+
+-- Tabela pedido
+create table orders(
+	idOrders int primary key auto_increment,
+    idOrderClient int,
+    orderStatus enum('Canceled', 'Confirmed', 'Processing') default 'Processing',
+    orderDescription varchar(255),
+    shippingPrice float default 0,
+    paymentMethod enum ('Debit Card', 'Credit Card'),
+    constraint fk_order_client foreign key (idOrderClient) references clients(idClients)	
+			on update cascade
+);
+alter table orders auto_increment = 1;
+
+
+-- Tabela  estoque
+create table productStorage(
+	idProductStorage int primary key auto_increment,
+    storageLocation varchar(45) not null,
+    quantity int default 0
+);
+alter table productStorage auto_increment = 1;
+
+-- Tabela fornecedores
+create table suppliers(
+	idSupplier int primary key auto_increment,
+    companyName varchar(45),
+    CNPJ char(15) not null unique,
+    phone varchar(11) not null
+);
+alter table suppliers auto_increment = 1;
+
+-- Tabela vendedores
+create table seller(
+	idSeller int primary key auto_increment,
+    companyName varchar(45),
+	CNPJ char(15) not null unique,
+    phone char(11) not null,
+    location varchar(255)
+);
+alter table seller auto_increment = 1;
+
+-- Tabelas com cardinalidade N para M
+
+create table productSeller(
+	idSeller int,
+    idProducts int,
+    prodQuantity int default 1,
+    primary key (idSeller, idProducts),
+    constraint foreign key (idSeller) references seller(idSeller) on update cascade,
+	constraint foreign key (idProducts) references products(idProducts) on update cascade
+);
+
+create table productOrder(
+	idProducts int,
+    idOrders int,
+    quantity int default 1,
+    POstatus enum('Available', 'Out of stock'),
+    primary key (idProducts, idOrders),
+    constraint foreign key (idProducts) references products(idProducts) on update cascade,
+    constraint foreign key (idOrders) references orders(idOrders) on update cascade
+);
+
+
+create table storageLocation(
+	idProducts int,
+    idProductStorage int,
+    location varchar(255) not null,
+    constraint foreign key (idProducts) references products(idProducts) on update cascade,
+    constraint foreign key (idProductStorage) references productStorage(idProductStorage) on update cascade
+);
+
+show tables;
+

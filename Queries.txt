@@ -1,0 +1,54 @@
+use ecommerce;
+show tables;
+
+-- Recuperações simples com SELECT Statement
+select * from clients;
+select * from orders;
+select * from productorder;
+select * from products;
+select * from productseller;
+select * from productstorage;
+select * from productsupplier;
+select * from seller;
+select * from storagelocation;
+select * from suppliers;
+
+-- Filtros com WHERE Statement
+select * from clients where Lname like 'P%'; 
+select * from orders where shippingPrice = 0;
+
+-- Crie expressões para gerar atributos derivados
+SELECT round(((SELECT COUNT(*) FROM products WHERE category = 'Eletronic') / count(*)) * 100, 2) AS '% de Eletronicos do Total de Produtos'
+FROM products;
+
+
+-- Defina ordenações dos dados com ORDER BY
+select * 
+from productstorage
+order by quantity;
+
+-- Condições de filtros aos grupos – HAVING Statement
+select concat(Fname, ' ', Lname) as Cliente, CPF, count(idOrderClient) as TotalPedidos
+from clients c inner join orders o on c.idClients = o.idOrderClient
+group by Cliente, CPF
+having CPF = '789123456';
+
+
+-- Quantos pedidos foram feitos por cada cliente?
+select concat(Fname, ' ', Lname) as Cliente, CPF, count(idOrderClient) as TotalPedidos
+from clients c inner join orders o on c.idClients = o.idOrderClient
+group by Cliente, CPF;
+
+
+-- Relação de produtos fornecedores e estoques;
+select Pname as NomeProduto, category as Categoria, companyName as Fornecerdor, CNPJ, ps.quantity as QntEstoque
+from products p inner join productsupplier ps on p.idProducts = ps.idProducts
+inner join suppliers s on ps.idSupplier = s.idSupplier
+-- inner join productstorage psg on p.idProducts = psg.idProductStorage
+order by QntEstoque desc;
+
+
+-- Relação de nomes dos fornecedores e nomes dos produtos;
+select Pname as NomeProduto,  companyName as Fornecerdor
+from products p inner join productsupplier ps on p.idProducts = ps.idProducts
+inner join suppliers s on ps.idSupplier = s.idSupplier

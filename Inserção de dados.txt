@@ -1,0 +1,83 @@
+-- Inserindo os dados
+use ecommerce;
+show tables;
+
+insert into clients (Fname, Minit, Lname, CPF, Address) values
+	('Maria','M','Silva', 12346789, 'rua silva de prata 29, Carangola - Cidade das flores'),
+	('Matheus','O','Pimentel', 987654321,'rua alemeda 289, Centro - Cidade das flores'),
+	('Ricardo','F','Silva', 45678913,'avenida alemeda vinha 1009, Centro - Cidade das flores'),
+	('Julia','S','França', 789123456,'rua lareijras 861, Centro - Cidade das flores'),
+	('Roberta','G','Assis', 98745631,'avenidade koller 19, Centro - Cidade das flores'),
+	('Isabela','M','Cruz', 654789123,'rua alemeda das flores 28, Centro - Cidade das flores');
+select * from clients;
+
+desc products;
+insert into products (Pname, classification_kids, category, rate, size) values
+	('Fone de ouvido',false,'Eletronic','4',null),
+    ('Barbie Elsa',true,'Toy','3',null),
+    ('Body Carters',true,'Clothing','5',null),
+    ('Microfone Vedo',False,'Eletronic','4',null),
+    ('Sofá retrátil',False,'Furniture','3','3x57x80'),
+    ('Farinha de arroz',False,'Food','2',null),
+    ('Fire Stick Amazon',False,'Eletronic','3',null);
+select * from products;
+
+desc orders;
+insert into orders (idOrders, idOrderClient, orderStatus, orderDescription, shippingPrice, paymentMethod) values 
+	(1, default,'compra via aplicativo',default,'Debit Card'),
+    (2,default,'compra via aplicativo',50,'Credit Card'),
+    (3,'Confirmed',null,default,'Debit Card'),
+    (4,default,'compra via web site',150,'Credit Card');
+select * from orders;
+
+desc productOrder;
+insert into productOrder (idProducts, idOrders, quantity, POstatus) values
+	(1,1,2,null),
+    (2,1,1,null),
+    (3,2,1,null);
+select * from productOrder;
+
+desc productStorage;
+insert into productStorage (storageLocation,quantity) values 
+	('Rio de Janeiro',1000),
+    ('Rio de Janeiro',500),
+    ('São Paulo',10),
+    ('São Paulo',100),
+    ('São Paulo',10),
+    ('Brasília',60);
+select * from productStorage;
+
+desc storageLocation;
+insert into storageLocation (idProducts, idProductStorage, location) values
+						 (1,2,'RJ'),
+                         (2,6,'GO');
+select * from storageLocation;
+
+desc suppliers;
+insert into suppliers (companyName, CNPJ, phone) values 
+	('Almeida e filhos', 123456789123456,'21985474'),
+    ('Eletrônicos Silva',854519649143457,'21985484'),
+    ('Eletrônicos Valma', 934567893934695,'21975474');
+select * from suppliers;
+
+desc productSupplier;
+insert into productSupplier (idSupplier, idProducts, quantity) values
+	(1,1,500),
+    (1,2,400),
+    (2,4,633),
+    (3,3,5),
+    (2,5,10);
+select * from productSupplier;
+
+desc seller;
+insert into seller (idSeller, companyName, CNPJ, phone, location) values 
+	('Tech eletronics', 123456789456321, 219946287, 'Rio de Janeiro'),
+	('Botique Durgas',167457389455621,219567895,'Rio de Janeiro'),
+	('Kids World',456789123654485,1198657484,'São Paulo');
+select * from seller;
+
+desc productSeller;
+insert into productSeller (idSeller, idProducts, prodQuantity) values 
+	(1,6,80),
+    (2,7,10);
+select * from productSeller;
